@@ -355,7 +355,7 @@ function resizeCanvas() {
 }
 
 function initParticles() {
-  const count = Math.min(90, Math.max(42, Math.floor((window.innerWidth * window.innerHeight) / 20)));
+  const count = Math.min(60, Math.max(24, Math.floor((window.innerWidth * window.innerHeight) / 36000)));
   particles = Array.from({ length: count }, () => ({
     x: Math.random() * window.innerWidth,
     y: Math.random() * window.innerHeight,
@@ -397,8 +397,9 @@ function drawParticles() {
       const q = particles[j];
       const dx = p.x - q.x;
       const dy = p.y - q.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      if (distance < 120) {
+      const distanceSquared = dx * dx + dy * dy;
+      if (distanceSquared < 14400) {
+        const distance = Math.sqrt(distanceSquared);
         ctx.beginPath();
         ctx.strokeStyle = `rgba(245, 158, 11, ${0.18 - distance / 800})`;
         ctx.lineWidth = 1;
@@ -410,9 +411,31 @@ function drawParticles() {
   }
 }
 
-function animate() {
-  drawParticles();
-  requestAnimationFrame(animate);
+let animationFrameId = null;
+let lastFrameTime = 0;
+const frameInterval = 1000 / 30;
+
+function animate(timestamp) {
+  if (timestamp - lastFrameTime >= frameInterval) {
+    drawParticles();
+    lastFrameTime = timestamp;
+  }
+  animationFrameId = requestAnimationFrame(animate);
+}
+
+function updateAnimationVisibility() {
+  if (document.hidden) {
+    if (animationFrameId !== null) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+    return;
+  }
+
+  if (animationFrameId === null) {
+    lastFrameTime = 0;
+    animationFrameId = requestAnimationFrame(animate);
+  }
 }
 
 window.addEventListener('pointermove', (event) => {
@@ -434,5 +457,6 @@ window.addEventListener('touchmove', (event) => {
 }, { passive: true });
 
 window.addEventListener('resize', resizeCanvas);
+document.addEventListener('visibilitychange', updateAnimationVisibility);
 resizeCanvas();
-animate();
+updateAnimationVisibility();
