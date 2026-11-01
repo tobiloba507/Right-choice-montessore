@@ -39,7 +39,7 @@ button { cursor: pointer; }
   opacity: 0.9;
 }
 .page-shell { position: relative; z-index: 1; width: min(1200px, calc(100% - 2rem)); margin: 0 auto; padding-bottom: 3rem; }
-.topbar { position: sticky; top: 0; z-index: 20; padding-top: 1rem; }
+.topbar { position: sticky; top: 0; z-index: 20; padding-top: 1rem; transition: padding-top 0.25s ease; }
 .glass {
   background: rgba(15, 61, 49, 0.48);
   border: 1px solid var(--glass-stroke);
@@ -55,7 +55,13 @@ button { cursor: pointer; }
   gap: 1rem;
   padding: 1rem 1.25rem;
   border-radius: 22px;
+  transition: gap 0.25s ease, padding 0.25s ease;
 }
+.topbar.is-compact { padding-top: 0.35rem; }
+.topbar.is-compact .nav { gap: 0.6rem; padding: 0.55rem 0.85rem; }
+.topbar.is-compact .brand-logo { width: 5rem; }
+.topbar.is-compact .nav-tab { padding: 0.5rem 0.8rem; }
+.topbar.is-compact .voice-controls { display: none; }
 .brand { display: flex; align-items: center; gap: 0.8rem; min-width: 220px; color: inherit; }
 .brand-logo { display: block; width: 8rem; height: auto; flex: 0 0 auto; }
 .brand-text { display: flex; flex-direction: column; line-height: 1.15; }
@@ -216,6 +222,10 @@ input.invalid, textarea.invalid { border-color: rgba(255,122,122,0.9); }
   .btn-inline { order: 3; width: 100%; }
   .voice-controls { order: 4; width: 100%; flex-basis: 100%; }
   .voice-status { flex-basis: 100%; text-align: center; }
+  .topbar.is-compact { padding-top: 0.25rem; }
+  .topbar.is-compact .nav { gap: 0.45rem; padding: 0.5rem 0.6rem; }
+  .topbar.is-compact .brand-logo { width: 4.5rem; }
+  .topbar.is-compact .btn-inline { display: none; }
   .hero { margin-top: 0.75rem; gap: 1rem; text-align: center; }
   .hero-copy { max-width: none; }
   .student-photo-placeholder { min-height: 180px; }

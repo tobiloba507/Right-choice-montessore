@@ -2,6 +2,21 @@
 const panels = document.querySelectorAll('.tab-panel');
 const menuToggle = document.querySelector('.menu-toggle');
 const navLinks = document.querySelector('.nav-links');
+const topbar = document.querySelector('.topbar');
+
+function updateTopbar() {
+  if (!topbar) return;
+
+  const isCompact = topbar.classList.contains('is-compact');
+  if (!isCompact && window.scrollY > 40) {
+    topbar.classList.add('is-compact');
+  } else if (isCompact && window.scrollY < 12) {
+    topbar.classList.remove('is-compact');
+  }
+}
+
+window.addEventListener('scroll', updateTopbar, { passive: true });
+updateTopbar();
 
 function setActiveTab(targetId) {
   stopReading();
