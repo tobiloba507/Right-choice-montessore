@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Right Choice Montessori School offers a premium early years and academic learning experience in Ibeju-Lekki, Lagos." />
+    <title>Right Choice Montessori School | Purity & Excellence</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="Rigth.css" />
+  </head>
+  <body>
+    <canvas id="particle-canvas" aria-hidden="true"></canvas>
+    <div class="page-shell">
+      <header class="topbar">
+        <nav class="nav glass" aria-label="Main navigation">
+          <a class="brand" href="#home" aria-label="Right Choice Montessori School home">
+            <img class="brand-logo" src="school-logo.png" alt="" />
+            <div class="brand-text">
+              <span class="brand-title">Right Choice</span>
+              <span class="brand-subtitle">Montessori School</span>
+            </div>
+          </a>
+
+          <button class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+            <span></span><span></span><span></span>
+          </button>
+
+          <div class="nav-links" role="tablist" aria-label="Primary sections">
+            <button class="nav-tab active" type="button" data-target="home" role="tab" aria-selected="true">Home</button>
+            <button class="nav-tab" type="button" data-target="about" role="tab" aria-selected="false">About</button>
+            <button class="nav-tab" type="button" data-target="academics" role="tab" aria-selected="false">Academics</button>
+            <button class="nav-tab" type="button" data-target="admissions" role="tab" aria-selected="false">Admissions</button>
+            <button class="nav-tab" type="button" data-target="contact" role="tab" aria-selected="false">Contact</button>
+          </div>
+
+          <a class="btn primary btn-inline" href="#admissions">Apply Now</a>
+          <div class="voice-controls" data-voice-ignore aria-label="Read the website aloud">
+            <button class="btn primary voice-button" id="read-section" type="button" aria-label="Read this section aloud">Read aloud</button>
+            <button class="btn secondary voice-button" id="pause-reading" type="button" disabled>Pause</button>
+            <button class="btn secondary voice-button" id="stop-reading" type="button" disabled>Stop</button>
+            <span id="voice-status" class="voice-status" aria-live="polite">Press the green button to hear this section. Choose another section to hear more.</span>
+          </div>
+        </nav>
+      </header>
+
+      <main>
+        <section id="home" class="tab-panel active" role="tabpanel" aria-label="Home section">
+          <div class="hero section-shell">
+            <div class="hero-copy reveal">
+              <p class="eyebrow">Purity &amp; Excellence</p>
+              <h1>Where Little Minds Grow Into Confident Leaders.</h1>
+              <p class="lead">Right Choice Montessori School nurtures curiosity, discipline, and confidence in a safe, vibrant atmosphere for learners in Lagos.</p>
+              <div class="cta-row">
+                <a class="btn primary" href="#admissions">Apply Now</a>
+                <button class="btn secondary" type="button" data-target="about">Learn More</button>
+              </div>
+              <ul class="hero-points">
+                <li>Play-based learning</li>
+                <li>Warm teachers</li>
+                <li>Strong values</li>
+              </ul>
+            </div>
+
+            <div class="hero-side">
+              <figure class="student-photo-slot reveal">
+                <div class="student-photo-placeholder" aria-hidden="true">
+                  <svg class="photo-placeholder-icon" viewBox="0 0 48 48" fill="none">
+                    <rect x="5" y="10" width="38" height="29" rx="5" />
+                    <circle cx="18" cy="21" r="4" />
+                    <path d="m9 35 10-9 7 6 5-5 8 8" />
+                  </svg>
+                  <span>Student photo</span>
+                  <small>Your school photo can go here</small>
+                </div>
+                <figcaption>Meet the bright minds of Right Choice</figcaption>
+              </figure>
+
+              <div class="hero-card reveal glass">
+                <span class="card-tag">Admissions Open</span>
+                <h2>Enrolment for 2027 / 2028</h2>
+                <p>Spaces are filling fast for our foundational classrooms and core academic wings.</p>
+
+                <div class="mini-list">
+                  <div><strong>Creche</strong><span>Early care &amp; sensory exploration</span></div>
+                  <div><strong>Nursery</strong><span>Discovery, communication &amp; creativity</span></div>
+                  <div><strong>Primary</strong><span>Academic excellence with strong values</span></div>
+                </div>
+
+                <a class="btn tertiary" href="#contact">Book a Visit</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats reveal">
+            <article class="stat glass"><span class="count" data-target="18">0</span><span class="label">Years of Excellence</span></article>
+            <article class="stat glass"><span class="count" data-target="12">0</span><span class="label">Expert Teachers</span></article>
+            <article class="stat glass"><span class="count" data-target="500">0</span><span class="label">Happy Learners</span></article>
+            <article class="stat glass"><span class="count" data-target="98">0</span><span class="label">Parent Satisfaction</span></article>
+          </div>
+
+          <div class="news-panel section-shell reveal glass">
+            <div class="section-heading">
+              <p class="eyebrow">School News</p>
+              <h3>Bright moments from campus life</h3>
+            </div>
+            <div class="news-grid">
+              <article class="news-card"><span class="news-tag">Event</span><h4>STEM Week Showcase</h4><p>Curious minds presented innovative projects and confident public speaking skills.</p></article>
+              <article class="news-card"><span class="news-tag">Achievement</span><h4>Reader of the Month</h4><p>Our young learners continue to celebrate reading, expression, and independent thinking.</p></article>
+              <article class="news-card"><span class="news-tag">Campus</span><h4>New Learning Spaces</h4><p>We expanded our literacy and creative spaces to deepen exploration and engagement.</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section id="about" class="tab-panel" role="tabpanel" aria-label="About section">
+          <div class="section-shell reveal">
+            <div class="section-heading center">
+              <p class="eyebrow">About Us</p>
+              <h3>Built on Purity, Excellence, and Purpose</h3>
+            </div>
+
+            <div class="two-column-grid">
+              <div class="story-card glass"><h4>Our Vision</h4><p>To produce confident, disciplined, and globally aware learners who are shaped by values, creativity, and academic brilliance.</p></div>
+              <div class="story-card glass"><h4>Our Mission</h4><p>To provide a nurturing educational environment where every child is encouraged to thrive, discover their strengths, and become a proud contributor to society.</p></div>
+            </div>
+
+            <div class="values-grid">
+              <article class="value-card glass"><span class="value-icon">✦</span><h4>Purity</h4><p>We maintain a wholesome environment that protects the innocence and dignity of every child.</p></article>
+              <article class="value-card glass"><span class="value-icon">✧</span><h4>Excellence</h4><p>We combine strong academics with personal growth and disciplined achievement.</p></article>
+              <article class="value-card glass"><span class="value-icon">✶</span><h4>Integrity</h4><p>Our culture teaches truthfulness, empathy, responsibility, and lasting character.</p></article>
+            </div>
+          </div>
+
+          <div class="section-shell reveal">
+            <div class="section-heading center"><p class="eyebrow">Leadership</p><h3>Meet the team guiding every learner</h3></div>
+            <div class="leadership-grid">
+              <article class="leader-card glass"><div class="leader-avatar">PM</div><h4>Prop. Kafayat Aderayo</h4><span>Proprietress</span><p>Championing values-led education and parent confidence through compassionate leadership.</p></article>
+              <article class="leader-card glass"><div class="leader-avatar">ES</div><h4>Mrs. Dada</h4><span>Academic Director</span><p>Driving a rich academic culture grounded in excellence, creativity, and child-centered learning.</p></article>
+              <article class="leader-card glass"><div class="leader-avatar">OA</div><h4>Mr. P.SAM</h4><span>Pastoral Care Lead</span><p>Ensuring every child grows with emotional resilience, confidence, and a sense of belonging.</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section id="academics" class="tab-panel" role="tabpanel" aria-label="Academics section">
+          <div class="section-shell reveal">
+            <div class="section-heading center"><p class="eyebrow">Academics</p><h3>Programs designed for every learning stage</h3></div>
+            <div class="academic-grid">
+              <article class="program-card glass"><span class="program-badge">Creche</span><h4>Early Foundations</h4><ul><li>Safe routines and cognitive play</li><li>Language and sensory development</li><li>Basic social confidence</li></ul></article>
+              <article class="program-card glass"><span class="program-badge alt">Nursery</span><h4>Discovery Learning</h4><ul><li>Phonics and literacy foundations</li><li>Creative and numeracy practice</li><li>Curiosity-driven exploration</li></ul></article>
+              <article class="program-card glass"><span class="program-badge alt-2">Primary</span><h4>Core Excellence</h4><ul><li>Strong academic structure</li><li>Critical thinking and projects</li><li>Character and discipline</li></ul></article>
+              <article class="program-card glass"><span class="program-badge alt-3">Secondary</span><h4>Future-Ready Scholars</h4><ul><li>Advanced subject mastery</li><li>Leadership opportunities</li><li>Global-minded learning culture</li></ul></article>
+            </div>
+          </div>
+        </section>
+
+        <section id="admissions" class="tab-panel" role="tabpanel" aria-label="Admissions section">
+          <div class="section-shell reveal">
+            <div class="section-heading center"><p class="eyebrow">Admissions</p><h3>A simple pathway to joining our school</h3></div>
+            <div class="admission-layout">
+              <div class="process-card glass"><h4>Admission Roadmap</h4><ol class="process-list"><li><span>01</span> Book a school visit or campus tour</li><li><span>02</span> Complete the application form</li><li><span>03</span> Submit required documents</li><li><span>04</span> Entrance assessment and interview</li><li><span>05</span> Receive admission offer and secure placement</li></ol></div>
+              <div class="requirements-card glass"><h4>Requirements Checklist</h4><ul><li>Birth certificate</li><li>Recent passport photograph</li><li>Previous school report/card</li><li>Parent/guardian ID</li><li>Medical information and allergies</li></ul></div>
+            </div>
+          </div>
+
+          <div class="section-shell form-section reveal glass">
+            <div class="form-copy"><p class="eyebrow">Enrollment</p><h3>Request more information</h3><p>Share your child’s details and we’ll contact you with the next steps.</p></div>
+            <form id="enquiry-form" novalidate>
+              <label class="form-trap" aria-hidden="true">Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+              <div class="form-row">
+                <label>Parent/Guardian Name<input type="text" name="parentName" placeholder="Enter full name" required /></label>
+                <label>Email Address<input type="email" name="email" placeholder="name@example.com" required /></label>
+              </div>
+              <div class="form-row">
+                <label>Child's Age / Class<input type="text" name="childInfo" placeholder="e.g. 5 years / Nursery 1" required /></label>
+                <label>Phone Number<input type="tel" name="phone" placeholder="08087535252" required /></label>
+              </div>
+              <label>Message<textarea name="message" rows="4" placeholder="Tell us about your child and your preferred class..." required></textarea></label>
+              <button class="btn primary" type="submit">Submit</button>
+              <p class="form-status" aria-live="polite"></p>
+            </form>
+          </div>
+        </section>
+
+        <section id="contact" class="tab-panel" role="tabpanel" aria-label="Contact section">
+          <div class="section-shell reveal">
+            <div class="section-heading center"><p class="eyebrow">Contact</p><h3>Visit our campus or reach out today</h3></div>
+            <div class="contact-layout">
+              <div class="contact-card glass"><h4>School Address</h4><p>Oke-Ogun, Epe Expressway, Ibeju-Lekki, Lagos State</p><div class="contact-list"><a href="tel:+2348087535252">2348087535252 </a><a href="https://wa.me/2348087535252" target="_blank" rel="noreferrer">WhatsApp us</a><a href="mailto:admissions@rightchoicemontessori.com">admissions@rightchoicemontessori.com</a></div></div>
+              <div class="map-card glass" aria-label="Location map preview"><div class="map-pin">●</div><div class="map-content"><h4>Campus Location</h4><p>Accessible via Epe Expressway in Ibeju-Lekki.</p><a href="https://www.google.com/maps/search/?api=1&amp;query=Oke-Ogun%2C%20Epe%20Expressway%2C%20Ibeju-Lekki%2C%20Lagos%20State" target="_blank" rel="noreferrer">Plan your visit</a></div></div>
+            </div>
+          </div>
+
+          <div class="section-shell form-section reveal glass">
+            <div class="form-copy"><p class="eyebrow">Get in touch</p><h3>Send a message directly</h3></div>
+            <form id="contact-form" novalidate>
+              <label class="form-trap" aria-hidden="true">Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+              <div class="form-row">
+                <label>Full Name<input type="text" name="name" placeholder="Your name" required /></label>
+                <label>Email Address<input type="email" name="contactEmail" placeholder="Your email" required /></label>
+              </div>
+              <label>Your Message<textarea name="message" rows="4" placeholder="How can we help you?" required></textarea></label>
+              <button class="btn primary" type="submit">Send Message</button>
+              <p class="form-status contact-status" aria-live="polite"></p>
+            </form>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer glass"><p>© 2026 Right Choice Montessori School — Purity &amp; Excellence.</p></footer>
+    </div>
+
+    <script src="Right.js"></script>
+  </body>
+</html>

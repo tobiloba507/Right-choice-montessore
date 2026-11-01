@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin sign in | Right Choice Montessori School</title>
+    <link rel="stylesheet" href="/Rigth.css" />
+  </head>
+  <body>
+    <main class="admin-page">
+      <a class="admin-brand login-brand" href="/" aria-label="Right Choice Montessori School home">
+        <img src="/school-logo.png" alt="" />
+        <span>Right Choice<small>Montessori School</small></span>
+      </a>
+      <section class="admin-card glass">
+        <p class="eyebrow">Secure staff access</p>
+        <h1>Admin sign in</h1>
+        <p>Sign in to review admissions enquiries and contact messages.</p>
+        <form id="login-form">
+          <label>Username<input name="username" autocomplete="username" required /></label>
+          <label>Password<input name="password" type="password" autocomplete="current-password" required /></label>
+          <button class="btn primary" type="submit">Sign in</button>
+          <p class="form-status" aria-live="polite"></p>
+        </form>
+        <a class="admin-back-link" href="/">Return to the school website</a>
+      </section>
+    </main>
+    <script src="/admin.js" defer></script>
+  </body>
+</html>

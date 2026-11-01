@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enquiry inbox | Right Choice Montessori School</title>
+    <link rel="stylesheet" href="/Rigth.css" />
+  </head>
+  <body>
+    <main class="admin-page admin-inbox">
+      <header class="admin-header glass">
+        <a class="admin-brand" href="/" aria-label="Right Choice Montessori School home">
+          <img src="/school-logo.png" alt="" />
+          <span>Right Choice<small>Montessori School</small></span>
+        </a>
+        <div class="admin-heading">
+          <p class="eyebrow">Staff dashboard</p>
+          <h1>Enquiry inbox</h1>
+          <p>Admissions and contact messages are private to authorized staff.</p>
+        </div>
+        <button class="btn secondary" id="logout-button" type="button">Sign out</button>
+      </header>
+      <section class="admin-card glass">
+        <div class="inbox-heading">
+          <h2>Messages</h2>
+          <button class="btn secondary" id="refresh-button" type="button">Refresh inbox</button>
+        </div>
+        <p id="inbox-status" class="form-status" aria-live="polite"></p>
+        <div class="inbox-scroll">
+          <table class="inbox-table">
+            <thead>
+              <tr><th>Date</th><th>Type</th><th>Name and details</th><th>Message</th><th>Status</th></tr>
+            </thead>
+            <tbody id="submission-list"></tbody>
+          </table>
+        </div>
+      </section>
+      <a class="admin-back-link" href="/">Return to the school website</a>
+    </main>
+    <script src="/admin.js" defer></script>
+  </body>
+</html>
