@@ -15,7 +15,7 @@ The setup creates an ignored `.env` file containing a scrypt password hash and a
 
 The admin inbox requires a server-side login. Sessions use random opaque tokens in `HttpOnly`, `SameSite=Strict` cookies; sign-in attempts and public submissions are rate limited. Admin pages and inbox APIs are protected on the server. Do not publish this static site on a file host or expose the development server to the internet.
 
-For production, deploy the Node server behind an HTTPS reverse proxy, set `NODE_ENV=production`, configure a private persistent database location and backups, and keep `.env` out of source control. The app binds to `127.0.0.1` by default; set `HOST=0.0.0.0` only when your trusted hosting setup requires it. Confirm the hosting platform supports Node.js 22.5+ and persistent SQLite storage before deployment.
+For production, deploy the Node server behind an HTTPS reverse proxy, set `NODE_ENV=production`, configure a private persistent database location and backups, and keep `.env` out of source control. The app binds to `127.0.0.1` locally and defaults to `0.0.0.0` in production; set `HOST` explicitly when your hosting platform requires a different interface. Confirm the hosting platform supports Node.js 22.5+ and persistent SQLite storage before deployment.
 
 The public forms post to `/api/submissions` on the same host as the Node server. A static Netlify deployment alone does not provide this API, so forms will not reach the staff inbox until the Node server is deployed and the website's domain or `/api/*` requests are routed to it. The staff inbox is available at `/admin/login` on that server.
 
