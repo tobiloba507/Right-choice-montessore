@@ -9,5 +9,8 @@
   "scripts": {
     "setup-admin": "node setup-admin.mjs",
     "start": "node server.mjs"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0"
   }
 }

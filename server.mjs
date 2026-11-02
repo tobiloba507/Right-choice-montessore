@@ -287,6 +287,12 @@ async function handleRequest(request, response) {
   if (request.method === 'GET' && url.pathname === '/Right.js') {
     return sendFile(response, 'Right.js');
   }
+  if (request.method === 'GET' && url.pathname === '/button-effects.js') {
+    return sendFile(response, 'button-effects.js');
+  }
+  if (request.method === 'GET' && url.pathname === '/gsap.min.js') {
+    return sendFile(response, 'node_modules/gsap/dist/gsap.min.js');
+  }
   if (request.method === 'GET' && url.pathname === '/school-logo.png') {
     return sendFile(response, 'school-logo.png');
   }
