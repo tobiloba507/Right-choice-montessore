@@ -31,7 +31,8 @@ const {
   SESSION_SECRET,
 } = process.env;
 const isProduction = process.env.NODE_ENV === 'production';
-const host = process.env.HOST || (isProduction ? '0.0.0.0' : '127.0.0.1');
+const isRender = process.env.RENDER === 'true';
+const host = isRender ? '0.0.0.0' : process.env.HOST || (isProduction ? '0.0.0.0' : '127.0.0.1');
 const port = Number(process.env.PORT || 3000);
 
 if (!ADMIN_USERNAME || !ADMIN_PASSWORD_SALT || !ADMIN_PASSWORD_HASH || !SESSION_SECRET) {
