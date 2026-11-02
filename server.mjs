@@ -99,6 +99,7 @@ if (expectedPasswordHash.length !== 64) {
 }
 
 const rateLimits = new Map();
+const adminPageAccess = new Map();
 const SESSION_TTL_SECONDS = 8 * 60 * 60;
 const SESSION_COOKIE = 'rc_admin';
 
@@ -297,17 +298,19 @@ async function handleRequest(request, response) {
     return sendFile(response, 'school-logo.png');
   }
   if (request.method === 'GET' && url.pathname === '/admin/login') {
-    if (getSession(request)) {
-      response.writeHead(303, { Location: '/admin' });
-      return response.end();
-    }
-    return sendFile(response, 'admin-login.html');
+    const session = getSession(request);
+    if (session) adminPageAccess.delete(session.token_hash);
+    return sendFile(response, 'admin-login.html', true);
   }
   if (request.method === 'GET' && url.pathname === '/admin') {
-    if (!getSession(request)) {
+    const session = getSession(request);
+    const accessExpiresAt = session && adminPageAccess.get(session.token_hash);
+    if (!session || !accessExpiresAt || accessExpiresAt <= Math.floor(Date.now() / 1000)) {
+      if (session) adminPageAccess.delete(session.token_hash);
       response.writeHead(303, { Location: '/admin/login' });
       return response.end();
     }
+    adminPageAccess.delete(session.token_hash);
     return sendFile(response, 'admin.html', true);
   }
   if (request.method === 'GET' && url.pathname === '/admin.js') {
@@ -352,8 +355,13 @@ async function handleRequest(request, response) {
 
     const token = randomBytes(32).toString('base64url');
     const expiresAt = Math.floor(Date.now() / 1000) + SESSION_TTL_SECONDS;
-    db.prepare('INSERT INTO admin_sessions (token_hash, expires_at) VALUES (?, ?)').run(sessionHash(token), expiresAt);
+    const tokenHash = sessionHash(token);
+    db.prepare('INSERT INTO admin_sessions (token_hash, expires_at) VALUES (?, ?)').run(tokenHash, expiresAt);
     db.prepare('DELETE FROM admin_sessions WHERE expires_at <= ?').run(Math.floor(Date.now() / 1000));
+    for (const [pendingHash, pendingExpiry] of adminPageAccess) {
+      if (pendingExpiry <= Math.floor(Date.now() / 1000)) adminPageAccess.delete(pendingHash);
+    }
+    adminPageAccess.set(tokenHash, expiresAt);
     return sendJson(response, 200, { ok: true }, {
       'Set-Cookie': cookieHeader(token, SESSION_TTL_SECONDS),
     });

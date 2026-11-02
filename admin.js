@@ -11,7 +11,15 @@ async function apiRequest(url, options = {}) {
       ...options.headers,
     },
   });
-  const result = await response.json();
+  if (!response.headers.get('content-type')?.includes('application/json')) {
+    throw new Error('The server returned a web page instead of an API response. Check that the Render web service is running the latest deployment.');
+  }
+  let result;
+  try {
+    result = await response.json();
+  } catch {
+    throw new Error('The server returned an invalid JSON response. Check the Render service logs and deployment.');
+  }
   if (!response.ok) throw new Error(result.error || 'The request could not be completed.');
   return result;
 }
