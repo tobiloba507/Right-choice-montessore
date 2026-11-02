@@ -65,7 +65,12 @@ async function loadSubmissions() {
     submissions.forEach((submission) => {
       const row = document.createElement('tr');
       appendCell(row, new Date(submission.createdAt).toLocaleString());
-      appendCell(row, submission.type === 'admission' ? 'Admissions' : 'Contact');
+      const submissionTypes = {
+        admission: 'Admissions',
+        contact: 'Contact',
+        complaint: 'Parent complaint',
+      };
+      appendCell(row, submissionTypes[submission.type] || 'Contact');
 
       const details = document.createElement('td');
       const name = document.createElement('strong');
@@ -83,6 +88,11 @@ async function loadSubmissions() {
         const childInfo = document.createElement('div');
         childInfo.textContent = `Child age/class: ${submission.childInfo}`;
         details.append(childInfo);
+      }
+      if (submission.category) {
+        const category = document.createElement('div');
+        category.textContent = `Concern: ${submission.category}`;
+        details.append(category);
       }
       row.append(details);
       appendCell(row, submission.message);

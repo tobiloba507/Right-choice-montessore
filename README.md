@@ -17,4 +17,6 @@ The admin inbox requires a server-side login. Sessions use random opaque tokens 
 
 For production, deploy the Node server behind an HTTPS reverse proxy, set `NODE_ENV=production`, configure a private persistent database location and backups, and keep `.env` out of source control. The app binds to `127.0.0.1` by default; set `HOST=0.0.0.0` only when your trusted hosting setup requires it. Confirm the hosting platform supports Node.js 22.5+ and persistent SQLite storage before deployment.
 
+The public forms post to `/api/submissions` on the same host as the Node server. A static Netlify deployment alone does not provide this API, so forms will not reach the staff inbox until the Node server is deployed and the website's domain or `/api/*` requests are routed to it. The staff inbox is available at `/admin/login` on that server.
+
 The public “Listen to this section” controls use the browser's built-in speech synthesis. Read-aloud availability and voice quality depend on the visitor's device and browser.

@@ -64,10 +64,27 @@ document.querySelectorAll('[data-target]').forEach((button) => {
   });
 });
 
+document.querySelectorAll('a[href="#admissions"]').forEach((link) => {
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+    setActiveTab('admissions');
+    document.getElementById('application-form')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+document.querySelectorAll('a[href="#contact"], a[href^="https://www.google.com/maps/"]').forEach((link) => {
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+    setActiveTab('contact');
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
 if (menuToggle && navLinks) {
   menuToggle.addEventListener('click', () => {
     const isOpen = navLinks.classList.toggle('open');
     menuToggle.setAttribute('aria-expanded', String(isOpen));
+    menuToggle.setAttribute('aria-label', isOpen ? 'Close navigation menu' : 'Open navigation menu');
   });
 }
 
@@ -132,7 +149,7 @@ function setStatus(el, message, type) {
 async function submitForm(form, type, successMessage) {
   const status = form.querySelector('.form-status');
   const button = form.querySelector('button[type="submit"]');
-  const fields = [...form.querySelectorAll('input:not([name="website"]), textarea')];
+  const fields = [...form.querySelectorAll('input:not([name="website"]), select, textarea')];
   const honeypot = form.elements.namedItem('website');
   let valid = true;
 
@@ -160,6 +177,10 @@ async function submitForm(form, type, successMessage) {
         fields: Object.fromEntries(new FormData(form).entries()),
       }),
     });
+    const contentType = response.headers.get('content-type') || '';
+    if (!contentType.toLowerCase().includes('application/json')) {
+      throw new Error('The school submission service is not available on this website.');
+    }
     const result = await response.json();
 
     if (!response.ok) {
@@ -169,7 +190,9 @@ async function submitForm(form, type, successMessage) {
     setStatus(status, successMessage, 'success');
     form.reset();
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Your message could not be sent.';
+    const message = error instanceof TypeError
+      ? 'Could not reach the school submission service. Check your internet connection and try again.'
+      : error instanceof Error ? error.message : 'Your message could not be sent.';
     setStatus(status, `${message} Please try again or contact the school by phone.`, 'error');
   } finally {
     button.disabled = false;
@@ -186,6 +209,11 @@ document.getElementById('enquiry-form')?.addEventListener('submit', (event) => {
 document.getElementById('contact-form')?.addEventListener('submit', (event) => {
   event.preventDefault();
   submitForm(event.currentTarget, 'contact', 'Thank you. Your message has been received by the school.');
+});
+
+document.getElementById('complaint-form')?.addEventListener('submit', (event) => {
+  event.preventDefault();
+  submitForm(event.currentTarget, 'complaint', 'Thank you. Your complaint has been received by the school.');
 });
 
 const readButton = document.getElementById('read-section');
@@ -337,126 +365,3 @@ stopButton?.addEventListener('click', () => {
   stopReading();
   voiceStatus.textContent = 'Reading stopped.';
 });
-
-const canvas = document.getElementById('particle-canvas');
-const ctx = canvas.getContext('2d');
-const colors = ['#22C55E', '#F59E0B', '#7C3AED'];
-let particles = [];
-const mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2, radius: 130, active: false };
-
-function resizeCanvas() {
-  const dpr = window.devicePixelRatio || 1;
-  canvas.width = Math.floor(window.innerWidth * dpr);
-  canvas.height = Math.floor(window.innerHeight * dpr);
-  canvas.style.width = `${window.innerWidth}px`;
-  canvas.style.height = `${window.innerHeight}px`;
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  initParticles();
-}
-
-function initParticles() {
-  const count = Math.min(60, Math.max(24, Math.floor((window.innerWidth * window.innerHeight) / 36000)));
-  particles = Array.from({ length: count }, () => ({
-    x: Math.random() * window.innerWidth,
-    y: Math.random() * window.innerHeight,
-    radius: 1.8 + Math.random() * 3.2,
-    vx: (Math.random() - 0.5) * 0.7,
-    vy: (Math.random() - 0.5) * 0.7,
-    color: colors[Math.floor(Math.random() * colors.length)],
-  }));
-}
-
-function drawParticles() {
-  ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
-  for (let i = 0; i < particles.length; i += 1) {
-    const p = particles[i];
-    p.x += p.vx;
-    p.y += p.vy;
-
-    if (p.x < 0 || p.x > window.innerWidth) p.vx *= -1;
-    if (p.y < 0 || p.y > window.innerHeight) p.vy *= -1;
-
-    if (mouse.active) {
-      const dx = p.x - mouse.x;
-      const dy = p.y - mouse.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      if (distance < mouse.radius) {
-        const force = (mouse.radius - distance) / mouse.radius;
-        p.x += (dx / distance || 0) * force * 10;
-        p.y += (dy / distance || 0) * force * 10;
-      }
-    }
-
-    ctx.beginPath();
-    ctx.fillStyle = p.color;
-    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-    ctx.fill();
-
-    for (let j = i + 1; j < particles.length; j += 1) {
-      const q = particles[j];
-      const dx = p.x - q.x;
-      const dy = p.y - q.y;
-      const distanceSquared = dx * dx + dy * dy;
-      if (distanceSquared < 14400) {
-        const distance = Math.sqrt(distanceSquared);
-        ctx.beginPath();
-        ctx.strokeStyle = `rgba(245, 158, 11, ${0.18 - distance / 800})`;
-        ctx.lineWidth = 1;
-        ctx.moveTo(p.x, p.y);
-        ctx.lineTo(q.x, q.y);
-        ctx.stroke();
-      }
-    }
-  }
-}
-
-let animationFrameId = null;
-let lastFrameTime = 0;
-const frameInterval = 1000 / 30;
-
-function animate(timestamp) {
-  if (timestamp - lastFrameTime >= frameInterval) {
-    drawParticles();
-    lastFrameTime = timestamp;
-  }
-  animationFrameId = requestAnimationFrame(animate);
-}
-
-function updateAnimationVisibility() {
-  if (document.hidden) {
-    if (animationFrameId !== null) {
-      cancelAnimationFrame(animationFrameId);
-      animationFrameId = null;
-    }
-    return;
-  }
-
-  if (animationFrameId === null) {
-    lastFrameTime = 0;
-    animationFrameId = requestAnimationFrame(animate);
-  }
-}
-
-window.addEventListener('pointermove', (event) => {
-  mouse.x = event.clientX;
-  mouse.y = event.clientY;
-  mouse.active = true;
-});
-
-window.addEventListener('pointerleave', () => {
-  mouse.active = false;
-});
-
-window.addEventListener('touchmove', (event) => {
-  if (event.touches[0]) {
-    mouse.x = event.touches[0].clientX;
-    mouse.y = event.touches[0].clientY;
-    mouse.active = true;
-  }
-}, { passive: true });
-
-window.addEventListener('resize', resizeCanvas);
-document.addEventListener('visibilitychange', updateAnimationVisibility);
-resizeCanvas();
-updateAnimationVisibility();

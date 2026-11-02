@@ -12,7 +12,6 @@
   </head>
   
   <body>
-    <canvas id="particle-canvas" aria-hidden="true"></canvas>
     <div class="page-shell">
       <header class="topbar">
         <nav class="nav glass" aria-label="Main navigation">
@@ -24,7 +23,7 @@
             </div>
           </a>
 
-          <button class="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false">
+          <button class="menu-toggle" type="button" aria-label="Open navigation menu" aria-expanded="false">
             <span></span><span></span><span></span>
           </button>
 
@@ -65,18 +64,41 @@
             </div>
 
             <div class="hero-side">
-              <figure class="student-photo-slot reveal">
-                <div class="student-photo-placeholder" aria-hidden="true">
-                  <svg class="photo-placeholder-icon" viewBox="0 0 48 48" fill="none">
-                    <rect x="5" y="10" width="38" height="29" rx="5" />
-                    <circle cx="18" cy="21" r="4" />
-                    <path d="m9 35 10-9 7 6 5-5 8 8" />
-                  </svg>
-                  <span>Student photo</span>
-                  <small>Your school photo can go here</small>
-                </div>
-                <figcaption>Meet the bright minds of Right Choice</figcaption>
-              </figure>
+              <div class="student-gallery reveal" role="group" aria-label="School photos">
+                <figure class="student-photo-slot student-photo-featured glass">
+                  <div class="student-photo-placeholder" aria-hidden="true">
+                    <svg class="photo-placeholder-icon" viewBox="0 0 48 48" fill="none">
+                      <rect x="5" y="10" width="38" height="29" rx="5" />
+                      <circle cx="18" cy="21" r="4" />
+                      <path d="m9 35 10-9 7 6 5-5 8 8" />
+                    </svg>
+                    <small>Add a school photo</small>
+                  </div>
+                  <figcaption>All School</figcaption>
+                </figure>
+                <figure class="student-photo-slot glass">
+                  <div class="student-photo-placeholder" aria-hidden="true">
+                    <svg class="photo-placeholder-icon" viewBox="0 0 48 48" fill="none">
+                      <rect x="5" y="10" width="38" height="29" rx="5" />
+                      <circle cx="18" cy="21" r="4" />
+                      <path d="m9 35 10-9 7 6 5-5 8 8" />
+                    </svg>
+                    <small>Add a class photo</small>
+                  </div>
+                  <figcaption>Primary</figcaption>
+                </figure>
+                <figure class="student-photo-slot glass">
+                  <div class="student-photo-placeholder" aria-hidden="true">
+                    <svg class="photo-placeholder-icon" viewBox="0 0 48 48" fill="none">
+                      <rect x="5" y="10" width="38" height="29" rx="5" />
+                      <circle cx="18" cy="21" r="4" />
+                      <path d="m9 35 10-9 7 6 5-5 8 8" />
+                    </svg>
+                    <small>Add a class photo</small>
+                  </div>
+                  <figcaption>Secondary</figcaption>
+                </figure>
+              </div>
 
               <div class="hero-card reveal glass">
                 <span class="card-tag">Admissions Open</span>
@@ -112,6 +134,11 @@
               <article class="news-card"><span class="news-tag">Campus</span><h4>New Learning Spaces</h4><p>We expanded our literacy and creative spaces to deepen exploration and engagement.</p></article>
             </div>
           </div>
+
+          <nav class="section-navigation glass" aria-label="Section navigation">
+            <button class="section-nav-button previous" type="button" data-target="contact" aria-label="Previous section: Contact"><span class="section-nav-arrow" aria-hidden="true">←</span><span class="section-nav-copy"><span>Previous section</span><strong>Contact</strong></span></button>
+            <button class="section-nav-button next" type="button" data-target="about" aria-label="Next section: About"><span class="section-nav-copy"><span>Next section</span><strong>About</strong></span><span class="section-nav-arrow" aria-hidden="true">→</span></button>
+          </nav>
         </section>
 
         <section id="about" class="tab-panel" role="tabpanel" aria-label="About section">
@@ -136,11 +163,16 @@
           <div class="section-shell reveal">
             <div class="section-heading center"><p class="eyebrow">Leadership</p><h3>Meet the team guiding every learner</h3></div>
             <div class="leadership-grid">
-              <article class="leader-card glass"><div class="leader-avatar">PM</div><h4>Prop. Kafayat Aderayo</h4><span>Proprietress</span><p>Championing values-led education and parent confidence through compassionate leadership.</p></article>
-              <article class="leader-card glass"><div class="leader-avatar">ES</div><h4>Mrs. Dada</h4><span>Academic Director</span><p>Driving a rich academic culture grounded in excellence, creativity, and child-centered learning.</p></article>
-              <article class="leader-card glass"><div class="leader-avatar">OA</div><h4>Mr. P.SAM</h4><span>Pastoral Care Lead</span><p>Ensuring every child grows with emotional resilience, confidence, and a sense of belonging.</p></article>
+              <article class="leader-card glass"><div class="leader-avatar">KA</div><h4>Prop. Kafayat Aderayo</h4><span>Proprietress</span><p>Championing values-led education and parent confidence through compassionate leadership.</p></article>
+              <article class="leader-card glass"><div class="leader-avatar">MD</div><h4>Mrs. Dada</h4><span>Academic Director</span><p>Driving a rich academic culture grounded in excellence, creativity, and child-centered learning.</p></article>
+              <article class="leader-card glass"><div class="leader-avatar">PS</div><h4>Mr. P.SAM</h4><span>Pastoral Care Lead</span><p>Ensuring every child grows with emotional resilience, confidence, and a sense of belonging.</p></article>
             </div>
           </div>
+
+          <nav class="section-navigation glass" aria-label="Section navigation">
+            <button class="section-nav-button previous" type="button" data-target="home" aria-label="Previous section: Home"><span class="section-nav-arrow" aria-hidden="true">←</span><span class="section-nav-copy"><span>Previous section</span><strong>Home</strong></span></button>
+            <button class="section-nav-button next" type="button" data-target="academics" aria-label="Next section: Academics"><span class="section-nav-copy"><span>Next section</span><strong>Academics</strong></span><span class="section-nav-arrow" aria-hidden="true">→</span></button>
+          </nav>
         </section>
 
         <section id="academics" class="tab-panel" role="tabpanel" aria-label="Academics section">
@@ -153,6 +185,11 @@
               <article class="program-card glass"><span class="program-badge alt-3">Secondary</span><h4>Future-Ready Scholars</h4><ul><li>Advanced subject mastery</li><li>Leadership opportunities</li><li>Global-minded learning culture</li></ul></article>
             </div>
           </div>
+
+          <nav class="section-navigation glass" aria-label="Section navigation">
+            <button class="section-nav-button previous" type="button" data-target="about" aria-label="Previous section: About"><span class="section-nav-arrow" aria-hidden="true">←</span><span class="section-nav-copy"><span>Previous section</span><strong>About</strong></span></button>
+            <button class="section-nav-button next" type="button" data-target="admissions" aria-label="Next section: Admissions"><span class="section-nav-copy"><span>Next section</span><strong>Admissions</strong></span><span class="section-nav-arrow" aria-hidden="true">→</span></button>
+          </nav>
         </section>
 
         <section id="admissions" class="tab-panel" role="tabpanel" aria-label="Admissions section">
@@ -164,8 +201,8 @@
             </div>
           </div>
 
-          <div class="section-shell form-section reveal glass">
-            <div class="form-copy"><p class="eyebrow">Enrollment</p><h3>Request more information</h3><p>Share your child’s details and we’ll contact you with the next steps.</p></div>
+          <div id="application-form" class="section-shell form-section reveal glass">
+            <div class="form-copy"><p class="eyebrow">Enrollment</p><h3>Start your admission enquiry</h3><p>Tell us about your child and we’ll contact you with the next steps for applying.</p></div>
             <form id="enquiry-form" novalidate>
               <label class="form-trap" aria-hidden="true">Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
               <div class="form-row">
@@ -181,6 +218,11 @@
               <p class="form-status" aria-live="polite"></p>
             </form>
           </div>
+
+          <nav class="section-navigation glass" aria-label="Section navigation">
+            <button class="section-nav-button previous" type="button" data-target="academics" aria-label="Previous section: Academics"><span class="section-nav-arrow" aria-hidden="true">←</span><span class="section-nav-copy"><span>Previous section</span><strong>Academics</strong></span></button>
+            <button class="section-nav-button next" type="button" data-target="contact" aria-label="Next section: Contact"><span class="section-nav-copy"><span>Next section</span><strong>Contact</strong></span><span class="section-nav-arrow" aria-hidden="true">→</span></button>
+          </nav>
         </section>
 
         <section id="contact" class="tab-panel" role="tabpanel" aria-label="Contact section">
@@ -205,6 +247,35 @@
               <p class="form-status contact-status" aria-live="polite"></p>
             </form>
           </div>
+
+          <div class="section-shell form-section reveal glass">
+            <div class="form-copy"><p class="eyebrow">Parent feedback</p><h3>Share a concern or complaint</h3><p>Tell us what happened so the school team can review your concern and follow up.</p></div>
+            <form id="complaint-form" novalidate>
+              <label class="form-trap" aria-hidden="true">Leave this field empty<input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+              <div class="form-row">
+                <label>Parent/Guardian Name<input type="text" name="name" placeholder="Enter your name" required /></label>
+                <label>Email Address<input type="email" name="contactEmail" placeholder="name@example.com" required /></label>
+              </div>
+              <label>What is your concern about?
+                <select name="category" required>
+                  <option value="">Choose a topic</option>
+                  <option value="Learning and classroom">Learning and classroom</option>
+                  <option value="Communication">Communication</option>
+                  <option value="Student wellbeing">Student wellbeing</option>
+                  <option value="Facilities">Facilities</option>
+                  <option value="Other">Other</option>
+                </select>
+              </label>
+              <label>Describe your concern<textarea name="message" rows="5" placeholder="Please describe what happened and how you would like us to help..." required></textarea></label>
+              <button class="btn primary" type="submit">Submit Complaint</button>
+              <p class="form-status" aria-live="polite"></p>
+            </form>
+          </div>
+
+          <nav class="section-navigation glass" aria-label="Section navigation">
+            <button class="section-nav-button previous" type="button" data-target="admissions" aria-label="Previous section: Admissions"><span class="section-nav-arrow" aria-hidden="true">←</span><span class="section-nav-copy"><span>Previous section</span><strong>Admissions</strong></span></button>
+            <button class="section-nav-button next" type="button" data-target="home" aria-label="Next section: Home"><span class="section-nav-copy"><span>Next section</span><strong>Home</strong></span><span class="section-nav-arrow" aria-hidden="true">→</span></button>
+          </nav>
         </section>
       </main>
 

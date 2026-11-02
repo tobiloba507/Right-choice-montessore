@@ -49,11 +49,12 @@ db.exec(`
   PRAGMA foreign_keys = ON;
   CREATE TABLE IF NOT EXISTS submissions (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type TEXT NOT NULL CHECK (type IN ('admission', 'contact')),
+    type TEXT NOT NULL CHECK (type IN ('admission', 'contact', 'complaint')),
     name TEXT NOT NULL,
     email TEXT NOT NULL,
     phone TEXT,
     child_info TEXT,
+    category TEXT,
     message TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'contacted', 'archived')),
     created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
@@ -62,8 +63,34 @@ db.exec(`
     token_hash TEXT PRIMARY KEY,
     expires_at INTEGER NOT NULL
   );
-  CREATE INDEX IF NOT EXISTS submissions_created_at_idx ON submissions(created_at DESC);
 `);
+
+const submissionsSchema = db.prepare(
+  "SELECT sql FROM sqlite_master WHERE type = 'table' AND name = 'submissions'",
+).get().sql;
+if (!submissionsSchema.includes("'complaint'")) {
+  db.exec(`
+    BEGIN;
+    CREATE TABLE submissions_new (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      type TEXT NOT NULL CHECK (type IN ('admission', 'contact', 'complaint')),
+      name TEXT NOT NULL,
+      email TEXT NOT NULL,
+      phone TEXT,
+      child_info TEXT,
+      category TEXT,
+      message TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'new' CHECK (status IN ('new', 'contacted', 'archived')),
+      created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+    );
+    INSERT INTO submissions_new (id, type, name, email, phone, child_info, message, status, created_at)
+      SELECT id, type, name, email, phone, child_info, message, status, created_at FROM submissions;
+    DROP TABLE submissions;
+    ALTER TABLE submissions_new RENAME TO submissions;
+    COMMIT;
+  `);
+}
+db.exec('CREATE INDEX IF NOT EXISTS submissions_created_at_idx ON submissions(created_at DESC)');
 
 const expectedPasswordHash = Buffer.from(ADMIN_PASSWORD_HASH, 'hex');
 if (expectedPasswordHash.length !== 64) {
@@ -181,7 +208,7 @@ function requiredText(value, label, maxLength) {
 }
 
 function validateSubmission(body) {
-  if (!body || !['admission', 'contact'].includes(body.type) || !body.fields || typeof body.fields !== 'object') {
+  if (!body || !['admission', 'contact', 'complaint'].includes(body.type) || !body.fields || typeof body.fields !== 'object') {
     throw new HttpError(400, 'The submitted form is invalid.');
   }
 
@@ -190,14 +217,21 @@ function validateSubmission(body) {
     throw new HttpError(400, 'The submitted form is invalid.');
   }
 
-  const name = requiredText(body.type === 'admission' ? fields.parentName : fields.name, 'Name', 100);
-  const email = requiredText(body.type === 'admission' ? fields.email : fields.contactEmail, 'Email', 254).toLowerCase();
+  const isAdmission = body.type === 'admission';
+  const name = requiredText(isAdmission ? fields.parentName : fields.name, 'Name', 100);
+  const email = requiredText(isAdmission ? fields.email : fields.contactEmail, 'Email', 254).toLowerCase();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new HttpError(400, 'Enter a valid email address.');
   const message = requiredText(fields.message, 'Message', 4000);
-  const phone = body.type === 'admission' ? requiredText(fields.phone, 'Phone number', 40) : null;
-  const childInfo = body.type === 'admission' ? requiredText(fields.childInfo, 'Child age or class', 100) : null;
+  const phone = isAdmission ? requiredText(fields.phone, 'Phone number', 40) : null;
+  const childInfo = isAdmission ? requiredText(fields.childInfo, 'Child age or class', 100) : null;
+  const category = body.type === 'complaint'
+    ? requiredText(fields.category, 'Concern topic', 60)
+    : null;
+  if (category && !['Learning and classroom', 'Communication', 'Student wellbeing', 'Facilities', 'Other'].includes(category)) {
+    throw new HttpError(400, 'Choose a valid concern topic.');
+  }
 
-  return { type: body.type, name, email, phone, childInfo, message };
+  return { type: body.type, name, email, phone, childInfo, category, message };
 }
 
 function passwordMatches(password) {
@@ -244,7 +278,7 @@ async function handleRequest(request, response) {
   const url = new URL(request.url, `http://${request.headers.host || 'localhost'}`);
 
   if (request.method === 'GET' && url.pathname === '/') {
-    return sendFile(response, 'Rigch.html');
+    return sendFile(response, 'index.html');
   }
   if (request.method === 'GET' && url.pathname === '/Rigth.css') {
     return sendFile(response, 'Rigth.css');
@@ -280,14 +314,15 @@ async function handleRequest(request, response) {
     }
     const submission = validateSubmission(await readJson(request));
     const result = db.prepare(`
-      INSERT INTO submissions (type, name, email, phone, child_info, message)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT INTO submissions (type, name, email, phone, child_info, category, message)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `).run(
       submission.type,
       submission.name,
       submission.email,
       submission.phone,
       submission.childInfo,
+      submission.category,
       submission.message,
     );
     return sendJson(response, 201, { ok: true, id: Number(result.lastInsertRowid) });
@@ -332,7 +367,7 @@ async function handleRequest(request, response) {
   if (request.method === 'GET' && url.pathname === '/api/admin/submissions') {
     if (!getSession(request)) throw new HttpError(401, 'Sign in required.');
     const submissions = db.prepare(`
-      SELECT id, type, name, email, phone, child_info AS childInfo, message, status, created_at AS createdAt
+      SELECT id, type, name, email, phone, child_info AS childInfo, category, message, status, created_at AS createdAt
       FROM submissions
       ORDER BY created_at DESC
       LIMIT 500
