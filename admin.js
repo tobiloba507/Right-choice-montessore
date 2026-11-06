@@ -142,7 +142,7 @@ async function loadSubmissions() {
     inboxStatus.textContent = `Showing ${submissions.length} message${submissions.length === 1 ? '' : 's'}.`;
   } catch (error) {
     if (error instanceof Error && error.message === 'Sign in required.') {
-      window.location.assign('/admin/login');
+      window.location.replace('/admin/login');
       return;
     }
     inboxStatus.textContent = error instanceof Error ? error.message : 'Could not load messages.';
@@ -154,16 +154,33 @@ document.getElementById('refresh-button')?.addEventListener('click', loadSubmiss
 document.getElementById('logout-button')?.addEventListener('click', async (event) => {
   const button = event.currentTarget;
   button.disabled = true;
+  if (inboxBody) inboxBody.replaceChildren();
+  if (inboxStatus) {
+    inboxStatus.textContent = 'Signing out...';
+    inboxStatus.classList.remove('error');
+  }
+  document.getElementById('refresh-button')?.setAttribute('disabled', '');
+
   try {
     await apiRequest('/api/admin/logout', { method: 'POST', body: '{}' });
-    window.location.assign('/admin/login');
+    window.location.replace('/admin/login');
   } catch (error) {
-    if (inboxStatus) {
-      inboxStatus.textContent = error instanceof Error ? error.message : 'Could not sign out.';
+    const message = error instanceof Error ? error.message : 'Could not sign out.';
+    button.disabled = false;
+    document.getElementById('refresh-button')?.removeAttribute('disabled');
+    await loadSubmissions();
+    if (inboxStatus && !inboxStatus.classList.contains('error')) {
+      inboxStatus.textContent = `${message} The inbox is still open.`;
       inboxStatus.classList.add('error');
     }
-    button.disabled = false;
   }
 });
 
 if (inboxBody) loadSubmissions();
+
+if (inboxBody) {
+  window.addEventListener('pagehide', () => inboxBody.replaceChildren());
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) loadSubmissions();
+  });
+}
