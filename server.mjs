@@ -32,6 +32,12 @@ const {
 } = process.env;
 const isProduction = process.env.NODE_ENV === 'production';
 const isRender = process.env.RENDER === 'true';
+const allowedOrigins = new Set(
+  (process.env.ALLOWED_ORIGINS || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+);
 const host = isRender ? '0.0.0.0' : process.env.HOST || (isProduction ? '0.0.0.0' : '127.0.0.1');
 const port = Number(process.env.PORT || 3000);
 
@@ -173,7 +179,10 @@ function requireSameOrigin(request) {
   } catch {
     throw new HttpError(403, 'Request origin could not be verified.');
   }
-  if (originUrl.host !== hostHeader || !['http:', 'https:'].includes(originUrl.protocol)) {
+  const isHttpOrigin = ['http:', 'https:'].includes(originUrl.protocol);
+  const isSameOrigin = originUrl.host === hostHeader;
+  const isAllowedProxyOrigin = allowedOrigins.has(originUrl.origin);
+  if (!isHttpOrigin || (!isSameOrigin && !isAllowedProxyOrigin)) {
     throw new HttpError(403, 'Cross-site requests are not allowed.');
   }
 }

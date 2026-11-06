@@ -1,0 +1,4 @@
+/api/* https://right-choice-montessore.onrender.com/api/:splat 200
+/admin https://right-choice-montessore.onrender.com/admin 200
+/admin/* https://right-choice-montessore.onrender.com/admin/:splat 200
+/admin.js https://right-choice-montessore.onrender.com/admin.js 200
