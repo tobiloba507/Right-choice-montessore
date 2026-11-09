@@ -1,6 +1,6 @@
 import { createHash, randomBytes, scryptSync, timingSafeEqual } from 'node:crypto';
 import { createServer } from 'node:http';
-import { mkdirSync, readFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { DatabaseSync } from 'node:sqlite';
@@ -262,6 +262,10 @@ const contentTypes = {
   '.css': 'text/css; charset=utf-8',
   '.js': 'text/javascript; charset=utf-8',
   '.png': 'image/png',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp',
+  '.avif': 'image/avif',
 };
 
 function sendFile(response, filename, noStore = false) {
@@ -306,6 +310,22 @@ async function handleRequest(request, response) {
   }
   if (request.method === 'GET' && url.pathname === '/school-logo.png') {
     return sendFile(response, 'school-logo.png');
+  }
+  const studentPhotoMatch = url.pathname.match(/^\/student-photos\/([A-Za-z0-9_-]+\.(?:avif|jpe?g|png|webp))$/i);
+  if (request.method === 'GET' && studentPhotoMatch) {
+    const photoPath = `student-photos/${studentPhotoMatch[1]}`;
+    if (!existsSync(resolve(root, photoPath))) {
+      return sendJson(response, 404, { error: 'Student photo not found.' });
+    }
+    return sendFile(response, photoPath);
+  }
+  const schoolPhotoMatch = url.pathname.match(/^\/image\/([A-Za-z0-9_-]+\.(?:avif|jpe?g|png|webp))$/i);
+  if (request.method === 'GET' && schoolPhotoMatch) {
+    const photoPath = `image/${schoolPhotoMatch[1]}`;
+    if (!existsSync(resolve(root, photoPath))) {
+      return sendJson(response, 404, { error: 'School photo not found.' });
+    }
+    return sendFile(response, photoPath);
   }
   if (request.method === 'GET' && url.pathname === '/admin/login') {
     const session = getSession(request);

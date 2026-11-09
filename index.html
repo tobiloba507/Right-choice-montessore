@@ -64,40 +64,27 @@
             </div>
 
             <div class="hero-side">
-              <div class="student-gallery reveal" role="group" aria-label="School photos">
+              <div class="student-gallery reveal" role="group" aria-label="Student photos">
                 <figure class="student-photo-slot student-photo-featured glass">
-                  <div class="student-photo-placeholder" aria-hidden="true">
-                    <svg class="photo-placeholder-icon" viewBox="0 0 48 48" fill="none">
-                      <rect x="5" y="10" width="38" height="29" rx="5" />
-                      <circle cx="18" cy="21" r="4" />
-                      <path d="m9 35 10-9 7 6 5-5 8 8" />
-                    </svg>
-                    <small>Add a school photo</small>
+                  <div class="student-photo-frame" id="student-photo-frame">
+                    <img class="student-photo-image" id="student-photo" src="/image/20261109_100242.jpg" alt="Student at Right Choice Montessori School" />
+                    <div class="student-photo-placeholder" aria-hidden="true">
+                      <svg class="photo-placeholder-icon" viewBox="0 0 48 48" fill="none">
+                        <rect x="5" y="10" width="38" height="29" rx="5" />
+                        <circle cx="18" cy="21" r="4" />
+                        <path d="m9 35 10-9 7 6 5-5 8 8" />
+                      </svg>
+                      <small>Student photo</small>
+                    </div>
                   </div>
-                  <figcaption>All School</figcaption>
-                </figure>
-                <figure class="student-photo-slot glass">
-                  <div class="student-photo-placeholder" aria-hidden="true">
-                    <svg class="photo-placeholder-icon" viewBox="0 0 48 48" fill="none">
-                      <rect x="5" y="10" width="38" height="29" rx="5" />
-                      <circle cx="18" cy="21" r="4" />
-                      <path d="m9 35 10-9 7 6 5-5 8 8" />
-                    </svg>
-                    <small>Add a class photo</small>
+                  <div class="student-photo-controls">
+                    <button class="student-photo-button" id="student-photo-previous" type="button" aria-label="Previous student photo">&#8592;</button>
+                    <span id="student-photo-count" aria-live="polite">1 / 2</span>
+                    <button class="student-photo-button" id="student-photo-next" type="button" aria-label="Next student photo">&#8594;</button>
                   </div>
-                  <figcaption>Primary</figcaption>
+                  <figcaption>Our Students</figcaption>
                 </figure>
-                <figure class="student-photo-slot glass">
-                  <div class="student-photo-placeholder" aria-hidden="true">
-                    <svg class="photo-placeholder-icon" viewBox="0 0 48 48" fill="none">
-                      <rect x="5" y="10" width="38" height="29" rx="5" />
-                      <circle cx="18" cy="21" r="4" />
-                      <path d="m9 35 10-9 7 6 5-5 8 8" />
-                    </svg>
-                    <small>Add a class photo</small>
-                  </div>
-                  <figcaption>Secondary</figcaption>
-                </figure>
+
               </div>
 
               <div class="hero-card reveal glass">
@@ -281,6 +268,14 @@
 
       <footer class="footer glass"><p>© 2026 Right Choice Montessori School — Purity &amp; Excellence.</p></footer>
     </div>
+
+    <aside id="cookie-notice" class="cookie-notice" aria-labelledby="cookie-notice-title" hidden>
+      <div>
+        <h2 id="cookie-notice-title">Cookie notice</h2>
+        <p>We use an essential cookie to remember your choice. Secure sign-in cookies are used only for the staff inbox; we do not use advertising or analytics cookies.</p>
+      </div>
+      <button class="btn primary" id="accept-cookies" type="button">Accept</button>
+    </aside>
 
     <script src="/gsap.min.js" defer></script>
     <script src="/button-effects.js" defer></script>

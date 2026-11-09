@@ -18,6 +18,47 @@ function updateTopbar() {
 window.addEventListener('scroll', updateTopbar, { passive: true });
 updateTopbar();
 
+const cookieNotice = document.getElementById('cookie-notice');
+const acceptCookiesButton = document.getElementById('accept-cookies');
+const hasAcceptedCookies = document.cookie.split('; ').some((cookie) => cookie.startsWith('rc_cookie_notice='));
+
+if (cookieNotice && !hasAcceptedCookies) cookieNotice.hidden = false;
+acceptCookiesButton?.addEventListener('click', () => {
+  const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+  document.cookie = `rc_cookie_notice=accepted; Max-Age=31536000; Path=/; SameSite=Lax${secure}`;
+  if (cookieNotice) cookieNotice.hidden = true;
+});
+
+const studentPhotos = [
+  '/image/20261109_100242.jpg',
+  '/image/20261109_100711.jpg',
+];
+const studentPhoto = document.getElementById('student-photo');
+const studentPhotoFrame = document.getElementById('student-photo-frame');
+const studentPhotoCount = document.getElementById('student-photo-count');
+let activeStudentPhoto = 0;
+
+function showStudentPhoto(index) {
+  if (!studentPhoto || !studentPhotoFrame || !studentPhotoCount) return;
+  activeStudentPhoto = (index + studentPhotos.length) % studentPhotos.length;
+  studentPhotoFrame.classList.remove('has-image');
+  studentPhoto.src = studentPhotos[activeStudentPhoto];
+  studentPhoto.alt = `Student photo ${activeStudentPhoto + 1} at Right Choice Montessori School`;
+  studentPhotoCount.textContent = `${activeStudentPhoto + 1} / ${studentPhotos.length}`;
+}
+
+studentPhoto?.addEventListener('load', () => studentPhotoFrame?.classList.add('has-image'));
+studentPhoto?.addEventListener('error', () => studentPhotoFrame?.classList.remove('has-image'));
+if (studentPhoto?.complete && studentPhoto.naturalWidth) {
+  studentPhotoFrame?.classList.add('has-image');
+}
+document.getElementById('student-photo-previous')?.addEventListener('click', () => {
+  showStudentPhoto(activeStudentPhoto - 1);
+});
+document.getElementById('student-photo-next')?.addEventListener('click', () => {
+  showStudentPhoto(activeStudentPhoto + 1);
+});
+
 function setActiveTab(targetId) {
   stopReading();
   navTabs.forEach((tab) => {
@@ -172,6 +213,7 @@ async function submitForm(form, type, successMessage) {
     const response = await fetch('/api/submissions', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(60000),
       body: JSON.stringify({
         type,
         fields: Object.fromEntries(new FormData(form).entries()),
@@ -190,7 +232,9 @@ async function submitForm(form, type, successMessage) {
     setStatus(status, successMessage, 'success');
     form.reset();
   } catch (error) {
-    const message = error instanceof TypeError
+    const message = error?.name === 'TimeoutError'
+      ? 'The school server is taking too long to respond. It may be waking up; please try again shortly.'
+      : error instanceof TypeError
       ? 'Could not reach the school submission service. Check your internet connection and try again.'
       : error instanceof Error ? error.message : 'Your message could not be sent.';
     setStatus(status, `${message} Please try again or contact the school by phone.`, 'error');
