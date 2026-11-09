@@ -30,8 +30,8 @@ acceptCookiesButton?.addEventListener('click', () => {
 });
 
 const studentPhotos = [
-  '/image/20261109_100242.jpg',
-  '/image/20261109_100711.jpg',
+  'image/20261109_100242.jpg',
+  'image/20261109_100711.jpg',
 ];
 const studentPhoto = document.getElementById('student-photo');
 const studentPhotoFrame = document.getElementById('student-photo-frame');
