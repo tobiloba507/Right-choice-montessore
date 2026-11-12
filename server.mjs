@@ -402,7 +402,7 @@ async function handleRequest(request, response) {
     return sendJson(response, 200, { ok: true, username: ADMIN_USERNAME });
   }
 
-  if (request.method === 'POST' && url.pathname === '/api/admin/logout') {
+  if (request.method === 'POST' && ['/api/admin/logout', '/api/admin/lock'].includes(url.pathname)) {
     requireSameOrigin(request);
     const token = cookieValue(request, SESSION_COOKIE);
     if (token) db.prepare('DELETE FROM admin_sessions WHERE token_hash = ?').run(sessionHash(token));

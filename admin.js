@@ -1,6 +1,55 @@
 const loginForm = document.getElementById('login-form');
 const inboxBody = document.getElementById('submission-list');
 const inboxStatus = document.getElementById('inbox-status');
+let lockStarted = false;
+let signingOut = false;
+
+async function lockAdminPage() {
+  if (!inboxBody || signingOut || lockStarted) return;
+  lockStarted = true;
+  inboxBody.replaceChildren();
+
+  const page = document.querySelector('.admin-page');
+  if (page) {
+    page.replaceChildren();
+    const card = document.createElement('section');
+    card.className = 'admin-card glass';
+    const heading = document.createElement('h1');
+    heading.textContent = 'Admin dashboard locked';
+    const status = document.createElement('p');
+    status.className = 'form-status';
+    status.setAttribute('aria-live', 'polite');
+    status.textContent = 'Locking the dashboard...';
+    const retryButton = document.createElement('button');
+    retryButton.className = 'btn primary';
+    retryButton.type = 'button';
+    retryButton.textContent = 'Retry locking';
+    retryButton.hidden = true;
+    retryButton.addEventListener('click', () => {
+      retryButton.disabled = true;
+      lockStarted = false;
+      lockAdminPage();
+    });
+    card.append(heading, status, retryButton);
+    page.append(card);
+
+    try {
+      await apiRequest('/api/admin/lock', {
+        method: 'POST',
+        body: '{}',
+        keepalive: true,
+      });
+      window.location.replace('/admin/login');
+    } catch (error) {
+      status.textContent = error instanceof Error
+        ? `Could not lock the dashboard: ${error.message}`
+        : 'Could not lock the dashboard. Check your connection and retry.';
+      status.classList.add('error');
+      retryButton.hidden = false;
+      retryButton.disabled = false;
+    }
+  }
+}
 
 async function apiRequest(url, options = {}) {
   const response = await fetch(url, {
@@ -57,12 +106,13 @@ function appendCell(row, value) {
 }
 
 async function loadSubmissions() {
-  if (!inboxBody || !inboxStatus) return;
+  if (!inboxBody || !inboxStatus || lockStarted) return;
   inboxStatus.textContent = 'Loading messages...';
   inboxStatus.classList.remove('error');
 
   try {
     const { submissions } = await apiRequest('/api/admin/submissions');
+    if (lockStarted) return;
     inboxBody.replaceChildren();
 
     if (submissions.length === 0) {
@@ -153,6 +203,7 @@ async function loadSubmissions() {
 document.getElementById('refresh-button')?.addEventListener('click', loadSubmissions);
 document.getElementById('logout-button')?.addEventListener('click', async (event) => {
   const button = event.currentTarget;
+  signingOut = true;
   button.disabled = true;
   if (inboxBody) inboxBody.replaceChildren();
   if (inboxStatus) {
@@ -166,6 +217,7 @@ document.getElementById('logout-button')?.addEventListener('click', async (event
     window.location.replace('/admin/login');
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Could not sign out.';
+    signingOut = false;
     button.disabled = false;
     document.getElementById('refresh-button')?.removeAttribute('disabled');
     await loadSubmissions();
@@ -179,7 +231,11 @@ document.getElementById('logout-button')?.addEventListener('click', async (event
 if (inboxBody) loadSubmissions();
 
 if (inboxBody) {
-  window.addEventListener('pagehide', () => inboxBody.replaceChildren());
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') lockAdminPage();
+  });
+  window.addEventListener('blur', lockAdminPage);
+  window.addEventListener('pagehide', lockAdminPage);
   window.addEventListener('pageshow', (event) => {
     if (event.persisted) loadSubmissions();
   });
